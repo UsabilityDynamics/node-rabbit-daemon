@@ -1,0 +1,23 @@
+web-app:
+  image: ubuntu
+  image: orchardup/postgresql
+  image: a4bc65fd
+  build: /path/to/build/dir
+  command: bundle exec thin -p 3000
+  links:
+   - db
+   - db:database
+   - redis
+  ports:
+   - "3000"
+   - "8000:8000"
+   - "49100:22"
+  expose:
+   - "3000"
+   - "8000"
+  volumes:
+   - cache/:/tmp/cache
+  environment:
+    RACK_ENV: development
+worker-service:
+  image: nodejs

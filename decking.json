@@ -1,0 +1,49 @@
+{
+  "images":  {
+    "wpcloud.io/service": "../wpcloud-docker-service",
+    "wpcloud.io/site": "../wpcloud-docker-site"
+  },
+  "clusters": {
+    "main": [
+      "nfprocessor", 
+      "nfconsumer"
+    ],
+    "dev": {
+      "group": "build",
+      "containers": ["nfprocessor", "nfconsumer"]
+    }    
+  },
+  "groups": {
+    "build": {
+        "options": {
+          "env":   ["NODE_ENV=build"],
+          "mount": [".:/path/to/src"]
+        },
+        "containers": {
+          "nfprocessor": {
+            "port": ["4321:1234"]
+          }
+        }
+    }    
+  }
+  "containers": {
+    "api_consumer": {
+      "image": "makeusabrew/twitter-consumer",
+      "env": : ["NODE_ENV=build", "CONSUMER_KEY=-"]
+    },
+    "data_processor": {
+      "image": "makeusabrew/twitter-processor",
+      "dependencies": ["redis"]
+    },
+    "nfprocessor": {
+      "image": "makeusabrew/nodeflakes-processor",
+      "port" : ["1234:1234"],
+      "env": : ["MY_ENV_VAR=value", "ANOTHER_VAR=foo"]
+      "dependencies": [
+        "nfconsumer:consumer"
+      ],
+      "mount": ["/path/to/host-dir:/path/to/container-dir"]
+    },
+    "nfconsumer": "makeusabrew/nodeflakes-consumer"
+  }
+}

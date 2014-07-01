@@ -1,0 +1,54 @@
+servicename1:
+  type: ruby
+
+# Comments start with #
+# This is a second service being defined in the same dotcloud.yml
+# You should have one dotcloud.yml file per application.
+
+# Required parameters for a service: service name and type
+servicename2:        # Any name up to 16 characters using a-z, 0-9 and _
+  type: python       # Must be valid service type.
+
+  # ---------------------------------------------------------------
+  # Optional parameters: All the following parameters are optional.
+
+  # Define the location of this service's code
+  approot: directory/relative/to/dotcloud_yml/  # Defaults to '.'
+
+  # Build Hooks. Paths are relative to approot.
+  prebuild: executable_name    # Defaults to undefined.
+  postbuild: executable_name   # Defaults to undefined.
+  postinstall: executable_name # Defaults to './postinstall'.
+
+  # Ubuntu packages installed via apt-get install.
+  systempackages:
+    - packagename
+    - another-packagename
+
+  # Configuration for your service. See docs for each dotCloud Service.
+  config:
+    service_specific_parameter1: valueA
+    service_specific_parameter2: valueB
+
+  # Custom ports. HTTP ports are proxied.
+  # Most services do not need custom ports.
+  ports:
+    portname1: http            # Name is arbitrary, type is (http|tcp|udp)
+    portname2: tcp
+
+  # Environment variables. Shared by all services.
+  environment:
+    EXAMPLEVAR1: EXAMPLE_VALUE
+    EXAMPLEVAR2: EXAMPLE_VALUE_TOO
+
+  # Supervisor.conf shortcuts
+  # You can use one or the other of (process|processess), but not both.
+  process: executable_name  # Defaults to './run'
+  processes: # For when you have more than one process to run.
+    process_name1: path/to/executable1
+    process_name2: path/to/executable2
+
+  # List of dependencies, best for PERL/PHP but also Python and Ruby
+  requirements: # Defaults to empty list.
+    - dependency_package_name_1
+    - dependency_package_2
